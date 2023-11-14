@@ -1,58 +1,72 @@
 $(document).ready(function() {
-    // Define the URL for the Open-Meteo API
-    const weatherApiUrl = 'https://api.open-meteo.com/v1/forecast';
+    // Sample quiz data
+    const questions = [
+        { question: "What is 2+2?", choices: ["3", "4", "5", "6"], answer: "4" },
+        { question: "What is the capital of France?", choices: ["Paris", "London", "Berlin", "Rome"], answer: "Paris" }
+        // Add more questions as needed
+    ];
 
-    // Function to fetch and display current weather
-    function fetchCurrentWeather() {
-        $.ajax({
-            url: weatherApiUrl,
-            data: {
-                // Add required parameters for Open-Meteo API request
-                latitude: '35.2226', // Latitude for Norman, OK
-                longitude: '-97.4395', // Longitude for Norman, OK
-                current: true,
-            },
-            success: function(response) {
-                // Update the current weather section with the response data
-                $('#temp').text(response.current_weather.temperature);
-                $('#wind-speed').text(response.current_weather.windspeed);
-                $('#humidity').text(response.current_weather.humidity);
-                // Add more data updates as required
-            },
-            error: function() {
-                alert('Error fetching current weather data');
-            }
-        });
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    // Display the current date using Moment.js
+    $('#current-date').text(moment().format('MMMM Do YYYY'));
+
+    // Display the first question
+    displayQuestion();
+
+    // On submitting an answer
+    $('#submit-btn').click(function() {
+        const selectedChoice = $('input[name="choice"]:checked').val();
+        checkAnswer(selectedChoice);
+    });
+
+    function displayQuestion() {
+        const question = questions[currentQuestionIndex];
+        $('#question-text').text(question.question);
+        const choicesHtml = _.shuffle(question.choices).map(choice => 
+            `<li><input type="radio" name="choice" value="${choice}"> ${choice}</li>`
+        ).join("");
+        $('#choices-container').html(choicesHtml);
     }
 
-    // Function to fetch and display weather forecast
-    function fetchWeatherForecast() {
-        $.ajax({
-            url: weatherApiUrl,
-            data: {
-                // Add required parameters for Open-Meteo API request
-                latitude: '35.2226',
-                longitude: '-97.4395',
-                daily: ['temperature_2m_max', 'temperature_2m_min'],
-                timezone: 'America/Chicago', // Timezone for Norman, OK
-            },
-            success: function(response) {
-                // Process and display forecast data
-                // Example: Update a Chart.js chart with forecast data
-            },
-            error: function() {
-                alert('Error fetching weather forecast data');
-            }
-        });
+    function checkAnswer(selectedChoice) {
+        const correctAnswer = questions[currentQuestionIndex].answer;
+        if (selectedChoice === correctAnswer) {
+            score++;
+            Swal.fire({
+                title: 'Correct!',
+                text: 'You got the answer right.',
+                icon: 'success'
+            }).then(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    showFinalScore();
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'That was not correct.',
+                icon: 'error'
+            }).then(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    showFinalScore();
+                }
+            });
+        }
     }
 
-    // Call the functions to fetch and display data
-    fetchCurrentWeather();
-    fetchWeatherForecast();
-
-    // Initialize Leaflet map centered on Norman, OK
-    var map = L.map('map').setView([35.2226, -97.4395], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    function showFinalScore() {
+        Swal.fire({
+            title: 'Quiz Completed!',
+            text: `Your final score is ${score}/${questions.length}.`,
+            icon: 'info'
+        });
+    }
 });
