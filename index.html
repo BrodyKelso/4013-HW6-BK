@@ -5,17 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="map"></div>
-    <div id="weather-info">
-        <canvas id="weather-chart"></canvas>
-    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+
+    <main>
+        <section id="current-weather-section">
+            <h2>Current Weather</h2>
+            <div id="current-weather">
+                <p><strong>Temperature:</strong> <span id="temp">--</span> °C</p>
+                <p><strong>Wind Speed:</strong> <span id="wind-speed">--</span> km/h</p>
+                <p><strong>Humidity:</strong> <span id="humidity">--</span> %</p>
+                <!-- Additional weather parameters can be added here -->
+            </div>
+        </section>
+
+        <section id="forecast-section">
+            <h2>Weather Forecast</h2>
+            <div id="forecast">
+                <canvas id="weather-chart"></canvas>
+            </div>
+        </section>
+
+        <section id="map-section">
+            <h2>Map View</h2>
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Weather data provided by Open-Meteo</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
-

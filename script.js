@@ -1,39 +1,58 @@
 $(document).ready(function() {
-    // Initialize Leaflet map
-    var map = L.map('map').setView([51.505, -0.09], 13);
+    // Define the URL for the Open-Meteo API
+    const weatherApiUrl = 'https://api.open-meteo.com/v1/forecast';
+
+    // Function to fetch and display current weather
+    function fetchCurrentWeather() {
+        $.ajax({
+            url: weatherApiUrl,
+            data: {
+                // Add required parameters for Open-Meteo API request
+                latitude: '35.2226', // Latitude for Norman, OK
+                longitude: '-97.4395', // Longitude for Norman, OK
+                current: true,
+            },
+            success: function(response) {
+                // Update the current weather section with the response data
+                $('#temp').text(response.current_weather.temperature);
+                $('#wind-speed').text(response.current_weather.windspeed);
+                $('#humidity').text(response.current_weather.humidity);
+                // Add more data updates as required
+            },
+            error: function() {
+                alert('Error fetching current weather data');
+            }
+        });
+    }
+
+    // Function to fetch and display weather forecast
+    function fetchWeatherForecast() {
+        $.ajax({
+            url: weatherApiUrl,
+            data: {
+                // Add required parameters for Open-Meteo API request
+                latitude: '35.2226',
+                longitude: '-97.4395',
+                daily: ['temperature_2m_max', 'temperature_2m_min'],
+                timezone: 'America/Chicago', // Timezone for Norman, OK
+            },
+            success: function(response) {
+                // Process and display forecast data
+                // Example: Update a Chart.js chart with forecast data
+            },
+            error: function() {
+                alert('Error fetching weather forecast data');
+            }
+        });
+    }
+
+    // Call the functions to fetch and display data
+    fetchCurrentWeather();
+    fetchWeatherForecast();
+
+    // Initialize Leaflet map centered on Norman, OK
+    var map = L.map('map').setView([35.2226, -97.4395], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    // Example function to fetch and display weather data
-    function fetchWeatherData() {
-        // Use jQuery to make an AJAX request to a weather API
-        // Update the chart with the fetched data
-    }
-
-    // Initialize Chart.js chart
-    var ctx = document.getElementById('weather-chart').getContext('2d');
-    var weatherChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [], // Fill with data
-            datasets: [{
-                label: 'Temperature',
-                data: [], // Fill with data
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Call the function to fetch and display data
-    fetchWeatherData();
 });
