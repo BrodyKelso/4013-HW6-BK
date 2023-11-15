@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Sample quiz data
     const listQuestions = [
-        { question: "Have you ever had a DP shootout?", choices: ["Yes", "No",], answer: "Yes" },
+        { question: "Have you ever had a DP shootout?", choices: ["Yes", "No"], answer: "Yes" },
         { question: "When was the first HTML dirty joke posted on the internet?", choices: ["1989, with the advent of the World Wide Web.", "2001, marking a humorous milestone in the early days of social media platforms.", "1995, coinciding with the widespread popularity of early internet forums.", "1998, during the boom of personal websites and user-generated content."], answer: "1998, during the boom of personal websites and user-generated content." }
         // Add more questions as needed
     ];
@@ -9,22 +9,19 @@ $(document).ready(function() {
     let currentQuestion = 0;
     let score = 0;
 
-    
     $('#current-date').text(moment().format('MMMM Do YYYY'));
 
-    
     displayQuestion();
 
-    
-    $('#submit-btn').click(function() {
-        const Choice = $('input[name="choice"]:checked').val();
-        checkAnswer(Choice);
+    $('#submit-btn').click(function () {
+        const selectedChoice = $('input[name="choice"]:checked').val();
+        checkAnswer(selectedChoice);
     });
 
     function displayQuestion() {
-        const question = questions[currentQuestion];
+        const question = listQuestions[currentQuestion]; // Fix variable name here
         $('#question-text').text(question.question);
-        const choicesHtml = _.shuffle(question.choices).map(choice => 
+        const choicesHtml = _.shuffle(question.choices).map(choice =>
             `<li><input type="radio" name="choice" value="${choice}"> ${choice}</li>`
         ).join("");
         $('#choices-container').html(choicesHtml);
@@ -36,7 +33,7 @@ $(document).ready(function() {
             score++;
             Swal.fire({
                 title: 'Correct!',
-                text: 'What a deal pickle!',
+                text: 'What a dill pickle!', // Fix typo here
                 icon: 'success'
             }).then(() => {
                 currentQuestion++;
