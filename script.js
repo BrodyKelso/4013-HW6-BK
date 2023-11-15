@@ -19,7 +19,7 @@ $(document).ready(function () {
     });
 
     function displayQuestion() {
-        const question = listQuestions[currentQuestion]; // Fix variable name here
+        const question = listQuestions[currentQuestion]; 
         $('#question-text').text(question.question);
         const choicesHtml = _.shuffle(question.choices).map(choice =>
             `<li><input type="radio" name="choice" value="${choice}"> ${choice}</li>`
@@ -33,7 +33,7 @@ $(document).ready(function () {
             score++;
             Swal.fire({
                 title: 'Correct!',
-                text: 'What a dill pickle!', // Fix typo here
+                text: 'What a dill pickle!', 
                 icon: 'success'
             }).then(() => {
                 currentQuestion++;
@@ -45,8 +45,8 @@ $(document).ready(function () {
             });
         } else {
             Swal.fire({
-                title: 'Oops!',
-                text: 'That was not correct.',
+                title: 'Yo you got that wrong!',
+                text: 'You should do this one over.',
                 icon: 'error'
             }).then(() => {
                 currentQuestion++;
